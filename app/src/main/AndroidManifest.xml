@@ -57,7 +57,7 @@
     </queries>
 
     <application
-        android:name=".StreamFlixApp"
+        android:name=".ZykflixApp"
         android:allowBackup="true"
         android:banner="@mipmap/ic_banner"
         android:icon="@mipmap/ic_launcher"
@@ -84,7 +84,7 @@
                 <category android:name="android.intent.category.DEFAULT"/>
                 <category android:name="android.intent.category.BROWSABLE"/>
 
-                <data android:scheme="streamflix"
+                <data android:scheme="zykflix"
                         android:host="resolve"/>
             </intent-filter>
         </activity>

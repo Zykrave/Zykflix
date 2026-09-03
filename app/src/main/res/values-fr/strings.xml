@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:tools="http://schemas.android.com/tools" tools:ignore="MissingTranslation">
-    <string name="app_name">Streamflix</string>
+    <string name="app_name">Zykflix</string>
 
     <string name="loading_error_title">Une erreur est survenue</string>
     <string name="loading_error_retry">Réessayer</string>
@@ -408,7 +408,7 @@
     <string name="settings_category_poseidon_domain">Nom de domaine Poseidonhd2</string>
     <string name="settings_scan_resolver_qr_title">Scanner le QR de contournement TV</string>
     <string name="settings_scan_resolver_qr_summary">Ouvrir la caméra et scanner le QR affiché sur la TV</string>
-    <string name="settings_scan_resolver_invalid_qr">Ce code QR n\'est pas un lien de contournement StreamFlix.</string>
+    <string name="settings_scan_resolver_invalid_qr">Ce code QR n\'est pas un lien de contournement Zykflix.</string>
     <string name="settings_scan_resolver_failed">Impossible de démarrer le scanner QR sur cet appareil.</string>
     <string name="settings_category_provider_url_manual">Saisir manuellement</string>
     <string name="player_skip_intro">Passer l\'intro</string>

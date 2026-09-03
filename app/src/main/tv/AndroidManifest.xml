@@ -24,7 +24,7 @@
 
 
     <application
-        android:name=".StreamFlixApp"
+        android:name=".ZykflixApp"
         android:allowBackup="true"
         android:banner="@mipmap/ic_banner"
         android:icon="@mipmap/ic_launcher"
