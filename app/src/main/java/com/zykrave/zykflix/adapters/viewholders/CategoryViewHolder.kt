@@ -150,6 +150,35 @@ class CategoryViewHolder(
             }
         }
 
+        val updatePageHeight = fun(position: Int) {
+            val recyclerView = binding.vpCategorySwiper.getChildAt(0) as? RecyclerView ?: return
+            val viewHolder = recyclerView.findViewHolderForAdapterPosition(position) ?: return
+            val pageView = viewHolder.itemView
+            pageView.post {
+                val w = if (pageView.width > 0) pageView.width else binding.vpCategorySwiper.width
+                if (w > 0) {
+                    val widthSpec = View.MeasureSpec.makeMeasureSpec(w, View.MeasureSpec.EXACTLY)
+                    val heightSpec = View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED)
+                    pageView.measure(widthSpec, heightSpec)
+                    val newHeight = pageView.measuredHeight
+                    if (newHeight > 0 && binding.vpCategorySwiper.layoutParams.height != newHeight) {
+                        binding.vpCategorySwiper.layoutParams = binding.vpCategorySwiper.layoutParams.apply {
+                            height = newHeight
+                        }
+                    }
+                }
+            }
+        }
+
+        val childRv = binding.vpCategorySwiper.getChildAt(0) as? RecyclerView
+        childRv?.addOnChildAttachStateChangeListener(object : RecyclerView.OnChildAttachStateChangeListener {
+            override fun onChildViewAttachedToWindow(view: View) {
+                updatePageHeight(binding.vpCategorySwiper.currentItem)
+            }
+
+            override fun onChildViewDetachedFromWindow(view: View) {}
+        })
+
         binding.llDotsIndicator.apply {
             removeAllViews()
             repeat(category.list.size) {
@@ -173,6 +202,8 @@ class CategoryViewHolder(
                 binding.llDotsIndicator.children.forEachIndexed { index, view ->
                     view.isSelected = (indicatorPosition == index)
                 }
+
+                updatePageHeight(position)
 
                 handler.removeCallbacksAndMessages(null)
                 handler.postDelayed(8_000) {

@@ -537,18 +537,20 @@ class TvShowViewHolder(
         binding.ivSwiperBackground.loadTvShowBanner(tvShow) {
             centerCrop().transition(DrawableTransitionOptions.withCrossFade())
         }
-        binding.tvSwiperTitle.text = tvShow.title
-        binding.tvSwiperTvShowLastEpisode.text = if (isIptvProvider()) "" else tvShow.seasons.lastOrNull()?.episodes?.lastOrNull()?.let { "E${it.number}" } ?: context.getString(R.string.tv_show_item_type)
-        
-        binding.tvSwiperQuality.apply {
-            text = tvShow.quality
-            isVisible = !text.isNullOrEmpty()
+
+        val qualityStr = tvShow.quality?.takeIf { it.isNotBlank() }
+        val yearStr = tvShow.released?.format("yyyy")?.takeIf { it.isNotBlank() }
+        val typeStr = context.getString(R.string.tv_show_item_type).uppercase(Locale.ROOT)
+
+        val metadataParts = listOfNotNull(typeStr, qualityStr, yearStr).filter { it.isNotBlank() }
+        binding.tvSwiperMetadataLabel.text = if (metadataParts.isNotEmpty()) {
+            metadataParts.joinToString(" • ")
+        } else {
+            typeStr
         }
 
-        binding.tvSwiperReleased.apply {
-            text = tvShow.released?.format("yyyy")
-            isVisible = !text.isNullOrEmpty()
-        }
+        binding.tvSwiperTitle.text = tvShow.title
+        binding.tvSwiperTvShowLastEpisode.text = if (isIptvProvider()) "" else tvShow.seasons.lastOrNull()?.episodes?.lastOrNull()?.let { "E${it.number}" } ?: context.getString(R.string.tv_show_item_type)
 
         binding.tvSwiperRating.apply {
             text = tvShow.rating?.let { String.format(Locale.ROOT, "%.1f", it) }
@@ -563,6 +565,9 @@ class TvShowViewHolder(
             } else {
                 binding.root.findNavController().navigate(R.id.tv_show, tvShowArgs())
             }
+        }
+        binding.btnSwiperAddToList.setOnClickListener {
+            // TODO: Add to list functionality
         }
     }
 

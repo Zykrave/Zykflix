@@ -665,25 +665,20 @@ class MovieViewHolder(
             transition(DrawableTransitionOptions.withCrossFade())
         }
 
+        val qualityStr = movie.quality?.takeIf { it.isNotBlank() }
+        val yearStr = movie.released?.format("yyyy")?.takeIf { it.isNotBlank() }
+        val typeStr = context.getString(R.string.movie_item_type).uppercase(Locale.ROOT)
+
+        val metadataParts = listOfNotNull(typeStr, qualityStr, yearStr).filter { it.isNotBlank() }
+        binding.tvSwiperMetadataLabel.text = if (metadataParts.isNotEmpty()) {
+            metadataParts.joinToString(" • ")
+        } else {
+            typeStr
+        }
+
         binding.tvSwiperTitle.text = movie.title
 
         binding.tvSwiperTvShowLastEpisode.text = context.getString(R.string.movie_item_type)
-
-        binding.tvSwiperQuality.apply {
-            text = movie.quality
-            visibility = when {
-                text.isNullOrEmpty() -> View.GONE
-                else -> View.VISIBLE
-            }
-        }
-
-        binding.tvSwiperReleased.apply {
-            text = movie.released?.format("yyyy")
-            visibility = when {
-                text.isNullOrEmpty() -> View.GONE
-                else -> View.VISIBLE
-            }
-        }
 
         binding.tvSwiperRating.apply {
             text = movie.rating?.let { String.format(Locale.ROOT, "%.1f", it) } ?: "N/A"
@@ -714,6 +709,10 @@ class MovieViewHolder(
                     )
                 )
             }
+        }
+
+        binding.btnSwiperAddToList.setOnClickListener {
+            // TODO: Add to list functionality
         }
 
         binding.pbSwiperProgress.apply {
