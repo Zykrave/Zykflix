@@ -13,6 +13,7 @@ import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.RecyclerView
+import com.zykrave.zykflix.activities.main.MainMobileActivity
 import com.zykrave.zykflix.R
 import com.zykrave.zykflix.adapters.AppAdapter
 import com.zykrave.zykflix.database.AppDatabase
@@ -60,6 +61,17 @@ class FavoritesMobileFragment : Fragment() {
                 stateRestorationPolicy = RecyclerView.Adapter.StateRestorationPolicy.PREVENT_WHEN_EMPTY
             }
             addItemDecoration(SpacingItemDecoration(8.dp(requireContext())))
+            addOnScrollListener(object : RecyclerView.OnScrollListener() {
+                override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
+                    super.onScrolled(recyclerView, dx, dy)
+                    val activity = activity as? MainMobileActivity
+                    if (dy > 10) {
+                        activity?.setBottomNavVisibility(false)
+                    } else if (dy < -10) {
+                        activity?.setBottomNavVisibility(true)
+                    }
+                }
+            })
         }
         createDragHelper().attachToRecyclerView(binding.rvFavorites)
         binding.btnFavoritesReorder.setOnClickListener { showSortDialog() }

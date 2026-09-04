@@ -28,6 +28,7 @@ import kotlinx.coroutines.launch
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.RecyclerView
+import com.zykrave.zykflix.activities.main.MainMobileActivity
 
 class HomeMobileFragment : Fragment() {
 
@@ -132,6 +133,17 @@ class HomeMobileFragment : Fragment() {
             addItemDecoration(
                 SpacingItemDecoration(20.dp(requireContext()))
             )
+            addOnScrollListener(object : RecyclerView.OnScrollListener() {
+                override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
+                    super.onScrolled(recyclerView, dx, dy)
+                    val activity = activity as? MainMobileActivity
+                    if (dy > 10) {
+                        activity?.setBottomNavVisibility(false)
+                    } else if (dy < -10) {
+                        activity?.setBottomNavVisibility(true)
+                    }
+                }
+            })
         }
 
         binding.ivProviderLogo.apply {

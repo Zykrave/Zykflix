@@ -10,6 +10,7 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.flowWithLifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.RecyclerView
+import com.zykrave.zykflix.activities.main.MainMobileActivity
 import com.zykrave.zykflix.R
 import com.zykrave.zykflix.adapters.AppAdapter
 import com.zykrave.zykflix.database.AppDatabase
@@ -110,6 +111,17 @@ class TvShowsMobileFragment : Fragment() {
             addItemDecoration(
                 SpacingItemDecoration(10.dp(requireContext()))
             )
+            addOnScrollListener(object : RecyclerView.OnScrollListener() {
+                override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
+                    super.onScrolled(recyclerView, dx, dy)
+                    val activity = activity as? MainMobileActivity
+                    if (dy > 10) {
+                        activity?.setBottomNavVisibility(false)
+                    } else if (dy < -10) {
+                        activity?.setBottomNavVisibility(true)
+                    }
+                }
+            })
         }
     }
 

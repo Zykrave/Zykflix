@@ -14,6 +14,15 @@
         <item name="android:textSize">11sp</item>
     </style>
 
+    <style name="BottomNavActiveIndicator" parent="Widget.Material3.BottomNavigationView.ActiveIndicator">
+        <item name="android:color">#5B4FCF</item>
+        <item name="marginHorizontal">4dp</item>
+        <item name="shapeAppearance">@style/BottomNavIndicatorShape</item>
+    </style>
+
+    <style name="BottomNavIndicatorShape" parent="ShapeAppearance.Material3.Corner.Full">
+    </style>
+
     <!-- Tema Nero Amoled/Oled per Mobile -->
     <style name="AppTheme.Mobile.NeroAmoledOled" parent="AppTheme.Mobile">
         <item name="app_background_color">#000000</item>

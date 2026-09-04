@@ -4,10 +4,13 @@ import android.app.Activity
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.content.res.ColorStateList
+import android.graphics.Color
+import android.graphics.drawable.GradientDrawable
 import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import android.view.View
+import android.view.animation.OvershootInterpolator
 import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
 import androidx.activity.result.contract.ActivityResultContracts
@@ -16,12 +19,14 @@ import androidx.core.view.ViewCompat
 import androidx.core.view.WindowCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.WindowInsetsControllerCompat
+import androidx.core.view.marginBottom
 import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.flowWithLifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.navOptions
+import androidx.navigation.ui.NavigationUI
 import androidx.navigation.ui.setupWithNavController
 import com.zykrave.zykflix.BuildConfig
 import com.zykrave.zykflix.R
@@ -167,6 +172,24 @@ class MainMobileActivity : FragmentActivity() {
         viewModel.checkUpdate()
 
         binding.bnvMain.setupWithNavController(navController)
+        binding.bnvMain.setOnItemSelectedListener { item ->
+            binding.bnvMain.findViewById<View>(item.itemId)?.let { itemView ->
+                itemView.animate()
+                    .scaleX(0.85f)
+                    .scaleY(0.85f)
+                    .setDuration(100)
+                    .withEndAction {
+                        itemView.animate()
+                            .scaleX(1.0f)
+                            .scaleY(1.0f)
+                            .setDuration(100)
+                            .setInterpolator(OvershootInterpolator())
+                            .start()
+                    }
+                    .start()
+            }
+            NavigationUI.onNavDestinationSelected(item, navController)
+        }
         binding.btnMainSearch.setOnClickListener {
             if (navController.currentDestination?.id != R.id.search) {
                 navController.navigate(R.id.search)
@@ -576,6 +599,14 @@ class MainMobileActivity : FragmentActivity() {
         }
     }
 
+    fun setBottomNavVisibility(show: Boolean) {
+        val targetY = if (show) 0f else (binding.bnvMain.height + binding.bnvMain.marginBottom).toFloat()
+        binding.bnvMain.animate()
+            .translationY(if (show) 0f else targetY)
+            .setDuration(200)
+            .start()
+    }
+
     private fun applyThemeNavigationChrome() {
         val palette = ThemeManager.palette(UserPreferences.selectedTheme)
         val navColors = ColorStateList(
@@ -584,12 +615,19 @@ class MainMobileActivity : FragmentActivity() {
                 intArrayOf(),
             ),
             intArrayOf(
-                palette.mobileNavActive,
+                Color.WHITE,
                 palette.mobileNavInactive,
             )
         )
+        binding.bnvMain.itemActiveIndicatorColor = ColorStateList.valueOf(palette.mobileNavActive)
 
-        binding.bnvMain.setBackgroundColor(palette.mobileNavBackground)
+        val bnvBackground = binding.bnvMain.background
+        if (bnvBackground is GradientDrawable) {
+            bnvBackground.mutate()
+            bnvBackground.setColor(palette.mobileNavBackground)
+        } else {
+            binding.bnvMain.setBackgroundColor(palette.mobileNavBackground)
+        }
         binding.bnvMain.itemIconTintList = navColors
         binding.bnvMain.itemTextColor = navColors
 

@@ -26,6 +26,7 @@ import androidx.preference.PreferenceManager
 import androidx.preference.PreferenceScreen
 import androidx.preference.SwitchPreference
 import androidx.preference.SwitchPreferenceCompat
+import androidx.recyclerview.widget.RecyclerView
 import com.zykrave.zykflix.BuildConfig
 import com.zykrave.zykflix.R
 import com.zykrave.zykflix.activities.main.MainMobileActivity
@@ -192,6 +193,17 @@ class SettingsMobileFragment : PreferenceFragmentCompat() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         SettingsListStyler.attach(view, isTv = false)
+        listView.addOnScrollListener(object : RecyclerView.OnScrollListener() {
+            override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
+                super.onScrolled(recyclerView, dx, dy)
+                val activity = activity as? MainMobileActivity
+                if (dy > 10) {
+                    activity?.setBottomNavVisibility(false)
+                } else if (dy < -10) {
+                    activity?.setBottomNavVisibility(true)
+                }
+            }
+        })
     }
 
     override fun onPreferenceTreeClick(preference: Preference): Boolean {
