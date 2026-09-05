@@ -5,10 +5,14 @@ import android.app.Application
 import android.content.Context
 import android.content.pm.PackageManager
 import android.os.Bundle
+import android.util.Log
 import java.security.Security
 import org.conscrypt.Conscrypt
 import com.zykrave.zykflix.database.AppDatabase
+import com.zykrave.zykflix.models.TvShow
+import com.zykrave.zykflix.models.Video
 import com.zykrave.zykflix.providers.AniWorldProvider
+import com.zykrave.zykflix.providers.MiruroProvider
 import com.zykrave.zykflix.sync.CloudSyncManager
 import com.zykrave.zykflix.sync.SupabaseProvider
 import com.zykrave.zykflix.utils.AppLanguageManager
@@ -90,6 +94,7 @@ class ZykflixApp : Application() {
             ArtworkRepairScheduler.schedule(appContext, UserPreferences.currentProvider)
             CacheUtils.autoClearIfNeeded(appContext, thresholdMb = threshold)
         }
+
     }
 
     override fun onTrimMemory(level: Int) {
