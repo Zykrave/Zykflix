@@ -16,7 +16,6 @@ import com.zykrave.zykflix.models.Movie
 import com.zykrave.zykflix.models.TvShow
 import com.zykrave.zykflix.providers.AniWorldProvider
 import com.zykrave.zykflix.providers.Provider
-import com.zykrave.zykflix.providers.SerienStreamProvider
 import java.io.FileNotFoundException
 
 object ArtworkRepair {
@@ -139,7 +138,6 @@ object ArtworkRepair {
 
     private suspend fun prepareProvider(context: Context, provider: Provider) {
         when (provider) {
-            SerienStreamProvider -> SerienStreamProvider.initialize(context)
             AniWorldProvider -> AniWorldProvider.initialize(context)
         }
     }

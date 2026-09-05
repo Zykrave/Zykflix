@@ -8,6 +8,7 @@ import com.zykrave.zykflix.models.Episode
 import com.zykrave.zykflix.models.Movie
 import com.zykrave.zykflix.models.Season
 import com.zykrave.zykflix.models.TvShow
+import com.zykrave.zykflix.utils.AniListUtils
 import com.zykrave.zykflix.utils.ArtworkRepair
 import com.zykrave.zykflix.utils.UserPreferences
 import kotlinx.coroutines.Dispatchers
@@ -254,6 +255,23 @@ class TvShowViewModel(
             database.seasonDao().insertAll(orderedTvShow.seasons)
 
             _state.emit(State.SuccessLoading(orderedTvShow))
+
+            val providerClassName = UserPreferences.currentProvider?.javaClass?.simpleName.orEmpty()
+            if (AniListUtils.isAnimeProvider(providerClassName)) {
+                viewModelScope.launch(Dispatchers.IO) {
+                    val aniListInfo = AniListUtils.getAnimeInfo(orderedTvShow.title)
+                    if (aniListInfo != null) {
+                        val enrichedTvShow = orderedTvShow.copy(
+                            overview = orderedTvShow.overview.takeUnless { it.isNullOrBlank() } ?: aniListInfo.description,
+                            rating = orderedTvShow.rating ?: aniListInfo.rating,
+                            poster = orderedTvShow.poster.takeUnless { it.isNullOrBlank() } ?: aniListInfo.poster,
+                            banner = orderedTvShow.banner.takeUnless { it.isNullOrBlank() } ?: aniListInfo.banner,
+                        )
+                        enrichedTvShow.episodeCount = aniListInfo.episodeCount
+                        _state.emit(State.SuccessLoading(enrichedTvShow))
+                    }
+                }
+            }
         } catch (e: Exception) {
             Log.e("TvShowViewModel", "getTvShow: ", e)
             _state.emit(State.FailedLoading(e))

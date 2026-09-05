@@ -70,7 +70,6 @@ import com.zykrave.zykflix.models.Season
 import com.zykrave.zykflix.models.TvShow
 import com.zykrave.zykflix.models.Video
 import com.zykrave.zykflix.models.WatchItem
-import com.zykrave.zykflix.providers.SerienStreamProvider
 import com.zykrave.zykflix.sync.CloudSyncHooks
 import com.zykrave.zykflix.ui.PlayerTvView
 import com.zykrave.zykflix.utils.SubtitleOffsetRenderersFactory
@@ -277,62 +276,6 @@ class PlayerTvFragment : Fragment() {
                     PlayerViewModel.State.LoadingServers -> {}
                     is PlayerViewModel.State.SuccessLoadingServers -> {
                         servers = state.servers
-
-                        val sToServer = servers.firstOrNull {
-                            isSerienStreamBypassUrl(it.id)
-                        }
-                        if (sToServer != null && !waitingForBypass && !bypassDone) {
-                            waitingForBypass = true
-
-                            val bypassUrl = buildSerienStreamBypassUrl()
-                            if (bypassUrl.isNullOrBlank()) {
-                                waitingForBypass = false
-                                Toast.makeText(
-                                    requireContext(),
-                                    "Unable to prepare TV bypass page.",
-                                    Toast.LENGTH_SHORT
-                                ).show()
-                                return@collect
-                            }
-
-                            val session = BypassSession(
-                                token = UUID.randomUUID().toString(),
-                                serverUrl = sToServer.id,
-                                bypassUrl = bypassUrl,
-                            )
-                            activeBypassSession = session
-
-                            val actualPort = startWebSocketServer()
-                            if (actualPort == -1) {
-                                clearBypassSession()
-                                Toast.makeText(
-                                    requireContext(),
-                                    "Unable to start TV bypass. Please try again.",
-                                    Toast.LENGTH_SHORT
-                                ).show()
-                                return@collect
-                            }
-
-                            val wsUrl = BypassWebSocketEndpointHelper.getAdvertisedWsUrl(actualPort)
-                                ?: return@collect
-
-                            val qrContent = "com.zykrave.zykflix://resolve?ws=${Uri.encode(wsUrl)}&token=${Uri.encode(session.token)}"
-
-                            wsServer?.registerSession(
-                                session.token,
-                                JSONObject()
-                                    .put("url", session.bypassUrl)
-                                    .toString()
-                            )
-                            requireActivity().runOnUiThread {
-                                showQrDialog(qrContent)
-                                Log.d("Bypass", "Advertised WS URL: $wsUrl")
-                            }
-
-                            return@collect
-                        }
-
-
 
                         val providerName = UserPreferences.currentProvider?.name ?: ""
                         val isTmdb = providerName.contains("TMDb", ignoreCase = true)
@@ -1860,24 +1803,6 @@ class PlayerTvFragment : Fragment() {
 
         qrDialog?.show()
         qrDialog?.window?.setLayout(dialogWidth, LinearLayout.LayoutParams.WRAP_CONTENT)
-    }
-
-    private fun isSerienStreamBypassUrl(url: String): Boolean {
-        return runCatching {
-            Uri.parse(url).host.equals("serienstream.to", ignoreCase = true)
-        }.getOrDefault(false)
-    }
-
-    private fun buildSerienStreamBypassUrl(): String? {
-        val provider = UserPreferences.currentProvider ?: return null
-        if (provider != SerienStreamProvider) return null
-
-        val episodeId = when (val type = args.videoType) {
-            is Video.Type.Episode -> type.id
-            is Video.Type.Movie -> return null
-        }
-
-        return "${SerienStreamProvider.baseUrl}serie/$episodeId"
     }
 
     private fun startWebSocketServer(): Int {

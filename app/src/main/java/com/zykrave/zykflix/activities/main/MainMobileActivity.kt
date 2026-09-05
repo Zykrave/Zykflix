@@ -6,6 +6,7 @@ import android.content.pm.PackageManager
 import android.content.res.ColorStateList
 import android.graphics.Color
 import android.graphics.drawable.GradientDrawable
+import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.util.Log
@@ -33,9 +34,7 @@ import com.zykrave.zykflix.R
 import com.zykrave.zykflix.activities.tools.BypassWebViewActivity
 import com.zykrave.zykflix.databinding.ActivityMainMobileBinding
 import com.zykrave.zykflix.fragments.player.PlayerMobileFragment
-import com.zykrave.zykflix.providers.Cine24hProvider
 import com.zykrave.zykflix.providers.FilmyOnlineCcProvider
-import com.zykrave.zykflix.providers.GuardaSerieProvider
 import com.zykrave.zykflix.providers.IptvProvider
 import com.zykrave.zykflix.providers.Provider
 import com.zykrave.zykflix.providers.ZaluknijProvider
@@ -109,9 +108,7 @@ class MainMobileActivity : FragmentActivity() {
         super.onCreate(savedInstanceState)
 
         AnimeOnlineNinjaProvider.init(this)
-        Cine24hProvider.init(this)
         FilmyOnlineCcProvider.init(this)
-        GuardaSerieProvider.init(this)
         ZaluknijProvider.init(this)
 
         WindowCompat.setDecorFitsSystemWindows(window, false)

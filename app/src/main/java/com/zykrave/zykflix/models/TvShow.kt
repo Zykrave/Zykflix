@@ -33,6 +33,8 @@ class TvShow(
     @Ignore
     var providerName: String? = null,
     @Ignore
+    var episodeCount: Int? = null,
+    @Ignore
     val seasons: List<Season> = listOf(),
     @Ignore
     val genres: List<Genre> = listOf(),
@@ -119,6 +121,7 @@ class TvShow(
         poster: String? = this.poster,
         banner: String? = this.banner,
         imdbId: String? = this.imdbId,
+        episodeCount: Int? = this.episodeCount,
         seasons: List<Season> = this.seasons,
         genres: List<Genre> = this.genres,
         directors: List<People> = this.directors,
@@ -138,6 +141,7 @@ class TvShow(
         banner,
         imdbId,
         providerName,
+        episodeCount,
         seasons,
         genres,
         directors,

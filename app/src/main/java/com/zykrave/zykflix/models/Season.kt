@@ -22,6 +22,7 @@ class Season(
     var tvShow: TvShow? = null,
     @Ignore
     var episodes: List<Episode> = listOf(),
+    var episodeCount: Int? = null,
 ) : AppAdapter.Item {
 
 
@@ -35,6 +36,7 @@ class Season(
         poster: String? = this.poster,
         tvShow: TvShow? = this.tvShow,
         episodes: List<Episode> = this.episodes,
+        episodeCount: Int? = this.episodeCount,
     ) = Season(
         id,
         number,
@@ -42,6 +44,7 @@ class Season(
         poster,
         tvShow,
         episodes,
+        episodeCount,
     )
 
     override fun equals(other: Any?): Boolean {
@@ -56,6 +59,7 @@ class Season(
         if (poster != other.poster) return false
         if (tvShow != other.tvShow) return false
         if (episodes != other.episodes) return false
+        if (episodeCount != other.episodeCount) return false
         if (!::itemType.isInitialized || !other::itemType.isInitialized) return false
         return itemType == other.itemType
     }
@@ -67,6 +71,7 @@ class Season(
         result = 31 * result + (poster?.hashCode() ?: 0)
         result = 31 * result + (tvShow?.hashCode() ?: 0)
         result = 31 * result + episodes.hashCode()
+        result = 31 * result + (episodeCount ?: 0)
         result = 31 * result + (if (::itemType.isInitialized) itemType.hashCode() else 0)
         return result
     }

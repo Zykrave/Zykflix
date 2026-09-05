@@ -25,7 +25,6 @@ object UserPreferences {
     // Default DoH Provider URL (Cloudflare)
     private const val DEFAULT_DOH_PROVIDER_URL = "https://cloudflare-dns.com/dns-query"
     const val DOH_DISABLED_VALUE = "" // Value to represent DoH being disabled
-    private const val DEFAULT_SERIENSTREAM_DOMAIN = "s.to"
     private const val DEFAULT_MOFLIX_DOMAIN = "moflix-stream.xyz"
     private const val DEFAULT_STREAMINGCOMMUNITY_DOMAIN = "streamingunity.cc"
     private const val DEFAULT_CUEVANA_DOMAIN = "cuevana.gs"
@@ -373,30 +372,6 @@ object UserPreferences {
             }
         }
 
-    var serienstreamDomain: String
-        get() {
-            if (!::prefs.isInitialized) return DEFAULT_SERIENSTREAM_DOMAIN
-            val storedValue = prefs.getString(Key.SERIENSTREAM_DOMAIN.name, null)
-            return if (storedValue.isNullOrEmpty()) DEFAULT_SERIENSTREAM_DOMAIN else storedValue
-        }
-        set(value) {
-            val oldDomain = if (::prefs.isInitialized) prefs.getString(Key.SERIENSTREAM_DOMAIN.name, null) else null
-            if (!::prefs.isInitialized) return
-
-            if (value != oldDomain && !value.isNullOrEmpty() && !oldDomain.isNullOrEmpty()) {
-                clearProviderCache("SerienStream")
-            }
-
-            with(prefs.edit()) {
-                if (value.isNullOrEmpty()) {
-                    remove(Key.SERIENSTREAM_DOMAIN.name)
-                } else {
-                    putString(Key.SERIENSTREAM_DOMAIN.name, value)
-                }
-                apply()
-            }
-        }
-
     var cuevanaDomain: String
         get() {
             if (!::prefs.isInitialized) return DEFAULT_CUEVANA_DOMAIN
@@ -538,7 +513,6 @@ object UserPreferences {
         SCREEN_PADDING_Y,
         QUALITY_HEIGHT,
         SUBTITLE_NAME,
-        SERIENSTREAM_DOMAIN,
         MOFLIX_DOMAIN,
         STREAMINGCOMMUNITY_DOMAIN,
         CUEVANA_DOMAIN,

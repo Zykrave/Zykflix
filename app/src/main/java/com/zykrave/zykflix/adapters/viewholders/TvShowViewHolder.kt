@@ -634,6 +634,11 @@ class TvShowViewHolder(
             isVisible = !text.isNullOrEmpty()
         }
 
+        binding.tvTvShowEpisodes.apply {
+            text = tvShow.episodeCount?.let { "$it Ep." }
+            isVisible = !text.isNullOrEmpty()
+        }
+
         binding.tvTvShowGenres.apply {
             text = tvShow.genres.joinToString(", ") { it.name }
             isVisible = tvShow.genres.isNotEmpty()

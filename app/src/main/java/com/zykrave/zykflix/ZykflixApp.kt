@@ -9,7 +9,6 @@ import java.security.Security
 import org.conscrypt.Conscrypt
 import com.zykrave.zykflix.database.AppDatabase
 import com.zykrave.zykflix.providers.AniWorldProvider
-import com.zykrave.zykflix.providers.SerienStreamProvider
 import com.zykrave.zykflix.sync.CloudSyncManager
 import com.zykrave.zykflix.sync.SupabaseProvider
 import com.zykrave.zykflix.utils.AppLanguageManager
@@ -87,7 +86,6 @@ class ZykflixApp : Application() {
             AppDatabase.setup(appContext)
             SupabaseProvider.initialize(appContext)
             runCatching { CloudSyncManager.initialize(appContext) }
-            SerienStreamProvider.initialize(appContext)
             AniWorldProvider.initialize(appContext)
             ArtworkRepairScheduler.schedule(appContext, UserPreferences.currentProvider)
             CacheUtils.autoClearIfNeeded(appContext, thresholdMb = threshold)

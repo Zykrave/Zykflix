@@ -58,7 +58,6 @@ import com.zykrave.zykflix.models.Season
 import com.zykrave.zykflix.models.TvShow
 import com.zykrave.zykflix.models.Video
 import com.zykrave.zykflix.models.WatchItem
-import com.zykrave.zykflix.providers.SerienStreamProvider
 import com.zykrave.zykflix.sync.CloudSyncHooks
 import com.zykrave.zykflix.utils.MediaServer
 import com.zykrave.zykflix.utils.SubtitleOffsetRenderersFactory
@@ -147,13 +146,6 @@ class PlayerMobileFragment : Fragment() {
                 return@registerForActivityResult
             }
 
-            val bypassUrl = servers.firstOrNull { isSerienStreamBypassUrl(it.id) }?.id
-            if (bypassUrl.isNullOrBlank()) {
-                waitingForBypass = false
-                return@registerForActivityResult
-            }
-
-            applyBypassCookies(bypassUrl, cookies)
             waitingForBypass = false
             bypassDone = true
 
@@ -285,63 +277,43 @@ class PlayerMobileFragment : Fragment() {
                     PlayerViewModel.State.LoadingServers -> {}
                     is PlayerViewModel.State.SuccessLoadingServers -> {
                         servers = state.servers
-                        val sToServer = servers.firstOrNull {
-                            isSerienStreamBypassUrl(it.id)
+                        val providerName = UserPreferences.currentProvider?.name ?: ""
+                        val isTmdb = providerName.contains("TMDb", ignoreCase = true)
+                        val isAD = providerName.contains("AfterDark", ignoreCase = true)
+
+                        if (servers.isEmpty()) {
+                            val message = if (isTmdb || isAD) {
+                                val langCode = providerName.substringAfter("(").substringBefore(")")
+                                val locale = Locale.forLanguageTag(langCode)
+                                val langDisplayName = locale.getDisplayLanguage(Locale.getDefault())
+                                    .replaceFirstChar { if (it.isLowerCase()) it.titlecase(Locale.getDefault()) else it.toString() }
+
+                                if (isTmdb) getString(R.string.player_not_available_lang_message, langDisplayName)
+                                else getString(R.string.player_retry_later_message)
+                            } else {
+                                "No servers found for this content."
+                            }
+                            Toast.makeText(requireContext(), message, Toast.LENGTH_LONG).show()
+                            findNavController().navigateUp()
+                            return@collect
                         }
 
-                        if (sToServer != null && !waitingForBypass && !bypassDone) {
-                            val bypassUrl = buildSerienStreamBypassUrl()
-                            if (bypassUrl.isNullOrBlank()) {
-                                waitingForBypass = false
-                                Toast.makeText(requireContext(), "Unable to open s.to bypass page.", Toast.LENGTH_SHORT).show()
-                                return@collect
-                            }
-
-                            waitingForBypass = true
-                            bypassWebViewLauncher.launch(
-                                Intent(requireContext(), BypassWebViewActivity::class.java)
-                                    .putExtra(BypassWebViewActivity.EXTRA_URL, bypassUrl)
-                            )
-                        } else {
-                            val providerName = UserPreferences.currentProvider?.name ?: ""
-                            val isTmdb = providerName.contains("TMDb", ignoreCase = true)
-                            val isAD = providerName.contains("AfterDark", ignoreCase = true)
-
-                            if (servers.isEmpty()) {
-                                val message = if (isTmdb || isAD) {
-                                    val langCode = providerName.substringAfter("(").substringBefore(")")
-                                    val locale = Locale.forLanguageTag(langCode)
-                                    val langDisplayName = locale.getDisplayLanguage(Locale.getDefault())
-                                        .replaceFirstChar { if (it.isLowerCase()) it.titlecase(Locale.getDefault()) else it.toString() }
-
-                                    if (isTmdb) getString(R.string.player_not_available_lang_message, langDisplayName)
-                                    else getString(R.string.player_retry_later_message)
-                                } else {
-                                    "No servers found for this content."
-                                }
-                                Toast.makeText(requireContext(), message, Toast.LENGTH_LONG).show()
-                                findNavController().navigateUp()
-                                return@collect
-                            }
-
-                            player.playlistMetadata = MediaMetadata.Builder()
-                                .setTitle(state.toString())
-                                .setMediaServers(state.servers.map {
-                                    MediaServer(
-                                        id = it.id,
-                                        name = it.name,
-                                    )
-                                })
-                                .build()
-                            binding.settings.setOnServerSelectedListener { server ->
-                                viewModel.getVideo(state.servers.find { server.id == it.id }!!)
-                            }
-                            val preferredServer = state.servers.firstOrNull {
-                                it.name.equals(args.preferredServerName, ignoreCase = true)
-                            }
-                            viewModel.getVideo(preferredServer ?: state.servers.first())
+                        player.playlistMetadata = MediaMetadata.Builder()
+                            .setTitle(state.toString())
+                            .setMediaServers(state.servers.map {
+                                MediaServer(
+                                    id = it.id,
+                                    name = it.name,
+                                )
+                            })
+                            .build()
+                        binding.settings.setOnServerSelectedListener { server ->
+                            viewModel.getVideo(state.servers.find { server.id == it.id }!!)
                         }
-
+                        val preferredServer = state.servers.firstOrNull {
+                            it.name.equals(args.preferredServerName, ignoreCase = true)
+                        }
+                        viewModel.getVideo(preferredServer ?: state.servers.first())
                     }
 
                     is PlayerViewModel.State.FailedLoadingServers -> {
@@ -1561,24 +1533,6 @@ class PlayerMobileFragment : Fragment() {
         if (::mediaSession.isInitialized) {
             mediaSession.release()
         }
-    }
-
-    private fun isSerienStreamBypassUrl(url: String): Boolean {
-        return runCatching {
-            Uri.parse(url).host.equals("serienstream.to", ignoreCase = true)
-        }.getOrDefault(false)
-    }
-
-    private fun buildSerienStreamBypassUrl(): String? {
-        val provider = UserPreferences.currentProvider ?: return null
-        if (provider != SerienStreamProvider) return null
-
-        val episodeId = when (val type = args.videoType) {
-            is Video.Type.Episode -> type.id
-            is Video.Type.Movie -> return null
-        }
-
-        return "${SerienStreamProvider.baseUrl}serie/$episodeId"
     }
 
     private fun applyBypassCookies(url: String, cookieHeader: String) {

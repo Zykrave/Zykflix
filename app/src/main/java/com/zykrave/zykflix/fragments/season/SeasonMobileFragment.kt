@@ -4,7 +4,11 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.LinearLayout
+import android.widget.TextView
 import android.widget.Toast
+import androidx.core.content.ContextCompat
+import androidx.core.widget.TextViewCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.flowWithLifecycle
@@ -12,6 +16,7 @@ import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.zykrave.zykflix.R
 import com.zykrave.zykflix.adapters.AppAdapter
 import com.zykrave.zykflix.database.AppDatabase
 import com.zykrave.zykflix.databinding.FragmentSeasonMobileBinding
@@ -125,6 +130,37 @@ class SeasonMobileFragment : Fragment() {
         appAdapter.submitList(episodes.onEach { episode ->
             episode.itemType = AppAdapter.Type.EPISODE_MOBILE_ITEM
         })
+
+        if (episodes.size > 50) {
+            binding.hsvEpisodeRanges.visibility = View.VISIBLE
+            binding.llEpisodeRanges.removeAllViews()
+            val chunkSize = 50
+            val layoutManager = binding.rvEpisodes.layoutManager as? LinearLayoutManager
+            var start = 0
+            while (start < episodes.size) {
+                val end = minOf(start + chunkSize, episodes.size)
+                val rangeLabel = "${start + 1}-$end"
+                val button = TextView(requireContext()).apply {
+                    text = rangeLabel
+                    TextViewCompat.setTextAppearance(this, R.style.AppTheme_Widget_Mobile_Button_Secondary)
+                    background = ContextCompat.getDrawable(requireContext(), R.drawable.bg_button_secondary_mobile)
+                    setPadding(24.dp(requireContext()), 8.dp(requireContext()), 24.dp(requireContext()), 8.dp(requireContext()))
+                    val marginParams = LinearLayout.LayoutParams(
+                        LinearLayout.LayoutParams.WRAP_CONTENT,
+                        LinearLayout.LayoutParams.WRAP_CONTENT
+                    )
+                    marginParams.marginEnd = 8.dp(requireContext())
+                    layoutParams = marginParams
+                    setOnClickListener {
+                        layoutManager?.scrollToPositionWithOffset(start, 0)
+                    }
+                }
+                binding.llEpisodeRanges.addView(button)
+                start += chunkSize
+            }
+        } else {
+            binding.hsvEpisodeRanges.visibility = View.GONE
+        }
 
         val episodeIndex = episodes
             .sortedByDescending { it.watchHistory?.lastEngagementTimeUtcMillis }

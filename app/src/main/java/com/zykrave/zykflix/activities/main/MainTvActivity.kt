@@ -24,10 +24,8 @@ import com.zykrave.zykflix.fragments.player.PlayerTvFragment
 import com.zykrave.zykflix.ui.UpdateAppTvDialog
 import com.zykrave.zykflix.providers.IptvProvider
 import com.zykrave.zykflix.providers.Provider
-import com.zykrave.zykflix.providers.Cine24hProvider
 import com.zykrave.zykflix.providers.FilmyOnlineCcProvider
 import com.zykrave.zykflix.providers.ZaluknijProvider
-import com.zykrave.zykflix.providers.GuardaSerieProvider
 import com.zykrave.zykflix.utils.AppLanguageManager
 import com.zykrave.zykflix.utils.ThemeManager
 import com.zykrave.zykflix.utils.UserPreferences
@@ -56,10 +54,8 @@ class MainTvActivity : FragmentActivity() {
         
         // Inizializza il provider con il context dell'attività per gestire eventuali bypass visibili
         AnimeOnlineNinjaProvider.init(this)
-        Cine24hProvider.init(this)
         FilmyOnlineCcProvider.init(this)
         ZaluknijProvider.init(this)
-        GuardaSerieProvider.init(this)
 
         _binding = ActivityMainTvBinding.inflate(layoutInflater)
         setContentView(binding.root)

@@ -1,6 +1,7 @@
 package com.zykrave.zykflix.providers
 
 import android.net.Uri
+import android.util.Log
 import com.zykrave.zykflix.adapters.AppAdapter
 import com.zykrave.zykflix.extractors.Extractor
 import com.zykrave.zykflix.models.Category
@@ -169,6 +170,7 @@ object AnikotoProvider : Provider {
             Jsoup.parse(seasonsResponse.result.orEmpty())
                 .select(".season a[href]")
                 .mapIndexedNotNull { index, element ->
+                    Log.d("AnikotoDebug", element.outerHtml())
                     val seasonUrl = element.absUrl("href").ifBlank { element.attr("href").toAbsoluteUrl() }
                     val title = element.selectFirst(".name")?.text()?.trim()?.ifBlank { null }
                     val seasonNumber = Regex("""(\d+)""")
@@ -184,7 +186,8 @@ object AnikotoProvider : Provider {
                         poster = Regex("""background-image:\s*url\(['"]?([^'")]+)""")
                             .find(element.attr("style"))
                             ?.groupValues
-                            ?.getOrNull(1),
+                            ?.getOrNull(1)
+                            ?.toAbsoluteUrl(),
                     )
                 }
         }.getOrDefault(emptyList())

@@ -313,24 +313,6 @@
         </PreferenceCategory>
 
         <PreferenceCategory
-            android:key="pc_serienstream_settings"
-            android:title="@string/settings_category_serienstream"
-            app:iconSpaceReserved="false">
-
-            <EditTextPreference
-                android:key="provider_serienstream_domain"
-                android:title="@string/settings_category_serienstream_domain"
-                android:inputType="text"
-                app:iconSpaceReserved="false" />
-
-            <Preference
-                android:key="provider_serienstream_domain_reset"
-                android:title="@string/settings_serienstream_domain_reset"
-                android:summary="@string/settings_serienstream_domain_reset_summary"
-                app:iconSpaceReserved="false" />
-        </PreferenceCategory>
-
-        <PreferenceCategory
             android:key="pc_moflix_settings"
             android:title="@string/settings_category_moflix"
             app:iconSpaceReserved="false">
