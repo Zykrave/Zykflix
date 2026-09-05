@@ -262,6 +262,12 @@ object UserPreferences {
             Key.UPDATE_CHECK_ENABLED.setBoolean(value)
         }
 
+    var lastUpdateCheckTimestamp: Long
+        get() = Key.LAST_UPDATE_CHECK_TIMESTAMP.getLong() ?: 0L
+        set(value) {
+            Key.LAST_UPDATE_CHECK_TIMESTAMP.setLong(value)
+        }
+
     fun unlockParentalControls() {
         parentalControlFailedAttempts = 0
         parentalControlLockedUntilMillis = 0L
@@ -538,6 +544,7 @@ object UserPreferences {
         SELECTED_THEME,
         BYPASS_WS_ADVERTISED_HOST,
         UPDATE_CHECK_ENABLED,
+        LAST_UPDATE_CHECK_TIMESTAMP,
         PROVIDER_LANGUAGE,
         FAVORITE_PROVIDERS;
 

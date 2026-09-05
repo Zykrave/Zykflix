@@ -14,8 +14,8 @@ import kotlin.math.max
 
 object InAppUpdater {
 
-    private const val GITHUB_OWNER = "com.zykrave.zykflix-reborn2"
-    private const val GITHUB_REPO = "com.zykrave.zykflix"
+    private const val GITHUB_OWNER = "Zykrave"
+    private const val GITHUB_REPO = "Zykflix"
 
     private data class Version(val name: String) : Comparable<Version> {
         override operator fun compareTo(other: Version): Int {

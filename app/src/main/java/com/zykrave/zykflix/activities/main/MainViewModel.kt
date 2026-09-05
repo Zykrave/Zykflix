@@ -35,10 +35,16 @@ class MainViewModel : ViewModel() {
 
     fun checkUpdate() = viewModelScope.launch(Dispatchers.IO) {
         if (!UserPreferences.updateCheckEnabled) return@launch
+
+        val thirtyDaysMillis = 30L * 24 * 60 * 60 * 1000
+        val now = System.currentTimeMillis()
+        if (now - UserPreferences.lastUpdateCheckTimestamp < thirtyDaysMillis) return@launch
+
         _state.emit(State.CheckingUpdate)
 
         try {
             val newReleases = InAppUpdater.getNewReleases()
+            UserPreferences.lastUpdateCheckTimestamp = now
             if (newReleases.isEmpty()) return@launch
 
             val asset = newReleases.first().assets
