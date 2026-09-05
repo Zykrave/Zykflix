@@ -3,11 +3,12 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <PreferenceScreen
+        android:icon="@drawable/ic_settings_shield"
         android:key="screen_content"
         android:title="@string/settings_section_content_title"
         android:summary="@string/settings_screen_content_summary"
         android:widgetLayout="@layout/preference_widget_chevron"
-        app:iconSpaceReserved="false">
+        app:iconSpaceReserved="true">
 
         <PreferenceCategory
             android:key="pc_tmdb_settings"
@@ -78,11 +79,12 @@
     </PreferenceScreen>
 
     <PreferenceScreen
+        android:icon="@drawable/ic_player_settings_quality"
         android:key="screen_playback"
         android:title="@string/player_settings"
         android:summary="@string/settings_screen_playback_summary"
         android:widgetLayout="@layout/preference_widget_chevron"
-        app:iconSpaceReserved="false">
+        app:iconSpaceReserved="true">
 
         <PreferenceCategory
             android:title="@string/autoplay_settings"
@@ -167,11 +169,12 @@
     </PreferenceScreen>
 
     <PreferenceScreen
+        android:icon="@drawable/ic_settings_appearance"
         android:key="screen_appearance"
         android:title="@string/settings_category_appearance"
         android:summary="@string/settings_screen_appearance_summary"
         android:widgetLayout="@layout/preference_widget_chevron"
-        app:iconSpaceReserved="false">
+        app:iconSpaceReserved="true">
 
         <PreferenceCategory
             android:key="pc_appearance_settings"
@@ -206,11 +209,12 @@
     </PreferenceScreen>
 
     <PreferenceScreen
+        android:icon="@drawable/ic_player_settings_servers"
         android:key="screen_network"
         android:title="@string/settings_category_network_title"
         android:summary="@string/settings_screen_network_summary"
         android:widgetLayout="@layout/preference_widget_chevron"
-        app:iconSpaceReserved="false">
+        app:iconSpaceReserved="true">
 
         <PreferenceCategory
             android:key="pc_network_settings"
@@ -248,11 +252,12 @@
     </PreferenceScreen>
 
     <PreferenceScreen
+        android:icon="@drawable/ic_providers_language"
         android:key="screen_provider"
         android:title="@string/settings_category_provider_title"
         android:summary="@string/settings_screen_provider_summary"
         android:widgetLayout="@layout/preference_widget_chevron"
-        app:iconSpaceReserved="false">
+        app:iconSpaceReserved="true">
 
         <PreferenceCategory
             android:key="pc_provider_settings"
@@ -383,11 +388,12 @@
     </PreferenceScreen>
 
     <PreferenceScreen
+        android:icon="@drawable/ic_person_placeholder"
         android:key="screen_cloud_sync"
         android:title="@string/cloud_sync_title"
         android:summary="@string/cloud_sync_screen_summary"
         android:widgetLayout="@layout/preference_widget_chevron"
-        app:iconSpaceReserved="false">
+        app:iconSpaceReserved="true">
 
         <PreferenceCategory
             android:key="pc_supabase_config"
@@ -453,11 +459,12 @@
     </PreferenceScreen>
 
     <PreferenceScreen
+        android:icon="@drawable/ic_refresh"
         android:key="screen_backup"
         android:title="@string/backup_category_title"
         android:summary="@string/settings_screen_backup_summary"
         android:widgetLayout="@layout/preference_widget_chevron"
-        app:iconSpaceReserved="false">
+        app:iconSpaceReserved="true">
 
         <PreferenceCategory
             android:title="@string/backup_category_title"

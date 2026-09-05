@@ -9,12 +9,31 @@
         android:id="@+id/iv_tv_show_poster"
         android:layout_width="0dp"
         android:layout_height="0dp"
+        android:background="@drawable/bg_poster_card_clip"
+        android:foreground="@drawable/bg_poster_card_border"
+        android:clipToOutline="true"
         android:scaleType="centerCrop"
         android:importantForAccessibility="no"
         app:layout_constraintDimensionRatio="2:3"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/tv_tv_show_format_badge"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="6dp"
+        android:background="@drawable/bg_format_badge_pill"
+        android:paddingStart="6dp"
+        android:paddingTop="2dp"
+        android:paddingEnd="6dp"
+        android:paddingBottom="2dp"
+        android:text="@string/tv_show_item_type"
+        android:textColor="#FFFFFF"
+        android:textSize="11sp"
+        app:layout_constraintStart_toStartOf="@id/iv_tv_show_poster"
+        app:layout_constraintTop_toTopOf="@id/iv_tv_show_poster" />
 
     <ImageView
         android:id="@+id/iv_tv_show_favorite_ribbon"
@@ -108,10 +127,57 @@
         android:gravity="center_horizontal"
         android:lines="2"
         android:textColor="#FFFFFF"
-        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/ll_tv_show_rating_row"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/iv_tv_show_poster"
         tools:text="Title" />
+
+    <LinearLayout
+        android:id="@+id/ll_tv_show_rating_row"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="8dp"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/tv_tv_show_title">
+
+        <ImageView
+            android:layout_width="12dp"
+            android:layout_height="12dp"
+            android:layout_marginEnd="4dp"
+            android:src="@drawable/ic_star"
+            app:tint="#8CA6C2"
+            tools:ignore="ContentDescription" />
+
+        <TextView
+            android:id="@+id/tv_tv_show_rating"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="#8CA6C2"
+            android:textSize="12sp"
+            tools:text="8.0" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="4dp"
+            android:layout_marginEnd="4dp"
+            android:text="•"
+            android:textColor="#8CA6C2"
+            android:textSize="12sp" />
+
+        <TextView
+            android:id="@+id/tv_tv_show_rating_year"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="#8CA6C2"
+            android:textSize="12sp"
+            tools:text="2024" />
+
+    </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

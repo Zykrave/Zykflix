@@ -15,7 +15,7 @@
     </style>
 
     <style name="BottomNavActiveIndicator" parent="Widget.Material3.BottomNavigationView.ActiveIndicator">
-        <item name="android:color">#5B4FCF</item>
+        <item name="android:color">#4A90FF</item>
         <item name="marginHorizontal">4dp</item>
         <item name="shapeAppearance">@style/BottomNavIndicatorShape</item>
     </style>
@@ -147,8 +147,8 @@
         <item name="app_background_color">#181818</item>
         <item name="preferenceTheme">@style/PreferenceThemeOverlayLeanback</item>
         <item name="alertDialogTheme">@style/Theme.AppCompat.Dialog.Alert</item>
-        <item name="colorAccent">#FFFFFF</item>
-        <item name="colorControlActivated">#FFFFFF</item>
+        <item name="colorAccent">#4A90FF</item>
+        <item name="colorControlActivated">#4A90FF</item>
         <item name="colorControlNormal">#BDBDBD</item>
         <item name="android:windowBackground">@drawable/bg_splash_screen</item>
         <item name="home_gradient_drawable">@drawable/bg_home_gradient_default</item>

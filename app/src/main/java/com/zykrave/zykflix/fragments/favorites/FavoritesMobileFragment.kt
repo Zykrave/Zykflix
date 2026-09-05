@@ -280,6 +280,16 @@ class FavoritesMobileFragment : Fragment() {
             .show()
     }
 
+    override fun onResume() {
+        super.onResume()
+        binding.auroraBackground.startAnimation()
+    }
+
+    override fun onPause() {
+        super.onPause()
+        binding.auroraBackground.stopAnimation()
+    }
+
     override fun onDestroyView() {
         setRearrangeMode(false)
         appAdapter.onSaveInstanceState(binding.rvFavorites)

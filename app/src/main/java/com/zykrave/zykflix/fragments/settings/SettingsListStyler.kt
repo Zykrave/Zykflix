@@ -146,16 +146,16 @@ internal object SettingsListStyler {
         val titleColor = palette.tvHeaderPrimary
         val summaryColor = palette.tvHeaderSecondary
         val accentColor = palette.mobileNavActive
-        val rowBackgroundColor = ColorUtils.blendARGB(surfaceColor, titleColor, if (isTv) 0.09f else 0.07f)
-        val rowBorderColor = ColorUtils.blendARGB(surfaceColor, summaryColor, 0.42f)
+        val rowBackgroundColor = ColorUtils.blendARGB(surfaceColor, accentColor, if (isTv) 0.09f else 0.03f)
+        val rowBorderColor = ColorUtils.blendARGB(surfaceColor, summaryColor, if (isTv) 0.42f else 0.30f)
         val rowHighlightColor = ColorUtils.blendARGB(surfaceColor, accentColor, if (isTv) 0.22f else 0.18f)
         val rowHighlightBorderColor = ColorUtils.blendARGB(surfaceColor, accentColor, 0.62f)
 
         layoutParams?.setMargins(
             context.dp(if (isTv) 28 else 16),
-            context.dp(if (isTv) 8 else 6),
+            context.dp(if (isTv) 8 else 4),
             context.dp(if (isTv) 28 else 16),
-            context.dp(if (isTv) 8 else 6),
+            context.dp(if (isTv) 8 else 4),
         )
         view.layoutParams = layoutParams
         view.background = createRowBackground(
@@ -166,12 +166,12 @@ internal object SettingsListStyler {
             activeColor = rowHighlightColor,
             activeStrokeColor = rowHighlightBorderColor,
         )
-        view.minimumHeight = context.dp(if (isTv) 88 else 72)
+        view.minimumHeight = context.dp(if (isTv) 88 else 58)
         view.setPadding(
-            context.dp(if (isTv) 28 else 20),
-            context.dp(if (isTv) 18 else 16),
-            context.dp(if (isTv) 28 else 20),
-            context.dp(if (isTv) 18 else 16),
+            context.dp(if (isTv) 28 else 14),
+            context.dp(if (isTv) 18 else 12),
+            context.dp(if (isTv) 28 else 14),
+            context.dp(if (isTv) 18 else 12),
         )
 
         title.setTextColor(titleColor)
@@ -198,7 +198,7 @@ internal object SettingsListStyler {
         activeColor: Int,
         activeStrokeColor: Int,
     ): Drawable {
-        val radiusDp = if (isTv) 22 else 18
+        val radiusDp = if (isTv) 22 else 12
         val defaultStrokeDp = 1
         val activeStrokeDp = if (isTv) 2 else 1
 

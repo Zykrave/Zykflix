@@ -12,6 +12,7 @@ import com.zykrave.zykflix.R
 import com.zykrave.zykflix.databinding.ItemProviderMobileBinding
 import com.zykrave.zykflix.databinding.ItemProviderTvBinding
 import com.zykrave.zykflix.models.Provider
+import com.zykrave.zykflix.providers.IptvProvider
 import com.zykrave.zykflix.utils.UserPreferences
 import com.zykrave.zykflix.utils.toActivity
 import java.util.Locale
@@ -61,9 +62,15 @@ class ProviderViewHolder(
 
         binding.tvProviderName.text = provider.name
 
-        binding.tvProviderLanguage.text = Locale.forLanguageTag(provider.language)
+        val languageName = Locale.forLanguageTag(provider.language)
             .let { it.getDisplayLanguage(it) }
             .replaceFirstChar { it.titlecase() }
+        val typeLabel = contentTypeLabel(provider.provider)
+        binding.tvProviderLanguage.text = if (typeLabel.isNotEmpty()) {
+            "$typeLabel, $languageName"
+        } else {
+            languageName
+        }
     }
 
     private fun displayTvItem(binding: ItemProviderTvBinding) {
@@ -92,9 +99,33 @@ class ProviderViewHolder(
 
         binding.tvProviderName.text = provider.name
 
-        binding.tvProviderLanguage.text = Locale.forLanguageTag(provider.language)
+        val languageName = Locale.forLanguageTag(provider.language)
             .let { it.getDisplayLanguage(it) }
             .replaceFirstChar { it.titlecase() }
+        val typeLabel = contentTypeLabel(provider.provider)
+        binding.tvProviderLanguage.text = if (typeLabel.isNotEmpty()) {
+            "$typeLabel, $languageName"
+        } else {
+            languageName
+        }
+    }
+
+    private fun contentTypeLabel(provider: com.zykrave.zykflix.providers.Provider): String {
+        val knownAnimeProviders = setOf(
+            "AnimeWorldProvider", "JKAnimeProvider", "AniWorldProvider", 
+            "LatanimeProvider", "TioAnimeProvider", "AnimeAv1Provider", 
+            "AnimeUnityProvider", "AnimeOnlineNinjaProvider", "HiAnimeProvider",
+            "OtakufrProvider", "MiruroProvider"
+        )
+        return when {
+            provider is IptvProvider -> "Live TV"
+            knownAnimeProviders.contains(provider::class.simpleName) -> "Anime"
+            com.zykrave.zykflix.providers.Provider.supportsMovies(provider) && 
+            com.zykrave.zykflix.providers.Provider.supportsTvShows(provider) -> "Movies & TV"
+            com.zykrave.zykflix.providers.Provider.supportsMovies(provider) -> "Movies"
+            com.zykrave.zykflix.providers.Provider.supportsTvShows(provider) -> "TV Shows"
+            else -> ""
+        }
     }
 
     private fun loadProviderLogo(imageView: ImageView) {

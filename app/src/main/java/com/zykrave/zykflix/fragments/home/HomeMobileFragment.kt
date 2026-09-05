@@ -118,6 +118,16 @@ class HomeMobileFragment : Fragment() {
         }
     }
 
+    override fun onResume() {
+        super.onResume()
+        binding.auroraBackground.startAnimation()
+    }
+
+    override fun onPause() {
+        super.onPause()
+        binding.auroraBackground.stopAnimation()
+    }
+
     override fun onDestroyView() {
         super.onDestroyView()
         appAdapter.onSaveInstanceState(binding.rvHome)

@@ -10,6 +10,7 @@ import android.view.ViewGroup
 import android.view.animation.AnimationUtils
 import android.widget.Toast
 import androidx.core.content.ContextCompat
+import androidx.core.view.isVisible
 import androidx.core.net.toUri
 import androidx.lifecycle.findViewTreeLifecycleOwner
 import androidx.lifecycle.lifecycleScope
@@ -539,8 +540,11 @@ class MovieViewHolder(
             }
         }
 
-        binding.tvMovieReleasedYear.text = movie.released?.format("yyyy")
-            ?: context.getString(R.string.movie_item_type)
+        binding.llMovieRatingRow.isVisible = movie.rating != null
+        movie.rating?.let { rating ->
+            binding.tvMovieRating.text = String.format(Locale.ROOT, "%.1f", rating)
+            binding.tvMovieRatingYear.text = movie.released?.format("yyyy") ?: ""
+        }
 
         binding.pbMovieProgress.apply {
             val watchHistory = movie.watchHistory

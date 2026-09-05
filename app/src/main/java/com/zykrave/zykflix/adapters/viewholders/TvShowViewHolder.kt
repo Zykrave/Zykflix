@@ -350,6 +350,12 @@ class TvShowViewHolder(
         }
         binding.tvTvShowLastEpisode.text = episodeBadgeText()
         binding.tvTvShowTitle.text = tvShow.title
+
+        binding.llTvShowRatingRow.isVisible = tvShow.rating != null
+        tvShow.rating?.let { rating ->
+            binding.tvTvShowRating.text = String.format(Locale.ROOT, "%.1f", rating)
+            binding.tvTvShowRatingYear.text = tvShow.released?.format("yyyy") ?: ""
+        }
     }
 
     private fun displayGridTvItem(binding: ItemTvShowGridBinding) {
