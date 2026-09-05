@@ -255,7 +255,7 @@
     <string name="settings_version_mobile">Version Mobile</string>
     <string name="settings_about_version_name">Version %s</string>
     <string name="settings_help">Help</string>
-    <string name="settings_telegram">Telegram group</string>
+    <string name="settings_telegram">4K Wallpaper</string>
     <string name="settings_refresh_cache_title">Refresh cache from database</string>
     <string name="settings_refresh_cache_summary">Reload watch history and app data from database</string>
     <string name="settings_refresh_cache_confirm">Refresh cache?</string>
