@@ -170,7 +170,6 @@ object AnikotoProvider : Provider {
             Jsoup.parse(seasonsResponse.result.orEmpty())
                 .select(".season a[href]")
                 .mapIndexedNotNull { index, element ->
-                    Log.d("AnikotoDebug", element.outerHtml())
                     val seasonUrl = element.absUrl("href").ifBlank { element.attr("href").toAbsoluteUrl() }
                     val title = element.selectFirst(".name")?.text()?.trim()?.ifBlank { null }
                     val seasonNumber = Regex("""(\d+)""")

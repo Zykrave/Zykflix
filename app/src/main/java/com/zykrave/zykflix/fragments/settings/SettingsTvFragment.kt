@@ -60,6 +60,7 @@ import com.zykrave.zykflix.providers.StreamingCommunityProvider
 import com.zykrave.zykflix.providers.TmdbProvider
 import com.zykrave.zykflix.utils.BypassWebSocketEndpointHelper
 import com.zykrave.zykflix.utils.AppLanguageManager
+import com.zykrave.zykflix.utils.CacheUtils
 import com.zykrave.zykflix.utils.DnsResolver
 import com.zykrave.zykflix.utils.ProviderChangeNotifier
 import com.zykrave.zykflix.utils.QrUtils
@@ -721,6 +722,19 @@ class SettingsTvFragment : LeanbackPreferenceFragmentCompat() {
                 }
                 networkSettingsCategory.addPreference(testPreference)
             }
+        }
+
+        updateCacheSizeDisplay()
+
+        findPreference<Preference>("clear_app_cache")?.setOnPreferenceClickListener {
+            viewLifecycleOwner.lifecycleScope.launch(Dispatchers.IO) {
+                CacheUtils.clearAppCache(requireContext())
+                withContext(Dispatchers.Main) {
+                    Toast.makeText(requireContext(), getString(R.string.settings_clear_cache_done), Toast.LENGTH_SHORT).show()
+                    updateCacheSizeDisplay()
+                }
+            }
+            true
         }
 
         findPreference<Preference>("key_backup_export_tv")?.setOnPreferenceClickListener {
@@ -2041,5 +2055,17 @@ class SettingsTvFragment : LeanbackPreferenceFragmentCompat() {
             .show()
 
         dialog.window?.setLayout(dialogWidth, LinearLayout.LayoutParams.WRAP_CONTENT)
+    }
+
+    private fun updateCacheSizeDisplay() {
+        val cachePref = findPreference<Preference>("cache_size_display") ?: return
+        lifecycleScope.launch(Dispatchers.IO) {
+            val bytes = CacheUtils.getCacheSize(requireContext())
+            val mb = bytes / (1024.0 * 1024.0)
+            val formatted = String.format(Locale.US, "%.1f MB", mb)
+            withContext(Dispatchers.Main) {
+                cachePref.summary = formatted
+            }
+        }
     }
 }

@@ -43,6 +43,7 @@ import com.zykrave.zykflix.providers.MStreamProvider
 import com.zykrave.zykflix.providers.StreamingCommunityProvider
 import com.zykrave.zykflix.providers.TmdbProvider
 import com.zykrave.zykflix.utils.AppLanguageManager
+import com.zykrave.zykflix.utils.CacheUtils
 import com.zykrave.zykflix.utils.DnsResolver
 import com.zykrave.zykflix.utils.ProviderChangeNotifier
 import com.zykrave.zykflix.utils.ThemeManager
@@ -740,6 +741,19 @@ class SettingsMobileFragment : PreferenceFragmentCompat() {
 
         setupParentalControlPreferences()
 
+        updateCacheSizeDisplay()
+
+        findPreference<Preference>("clear_app_cache")?.setOnPreferenceClickListener {
+            viewLifecycleOwner.lifecycleScope.launch(Dispatchers.IO) {
+                CacheUtils.clearAppCache(requireContext())
+                withContext(Dispatchers.Main) {
+                    Toast.makeText(requireContext(), getString(R.string.settings_clear_cache_done), Toast.LENGTH_SHORT).show()
+                    updateCacheSizeDisplay()
+                }
+            }
+            true
+        }
+
         findPreference<Preference>("key_backup_export_mobile")?.setOnPreferenceClickListener {
             val timestamp = SimpleDateFormat("yyyyMMdd_HHmmss", Locale.getDefault()).format(Date())
             val fileName = "streamflix_mobile_backup_$timestamp.json"
@@ -794,6 +808,18 @@ class SettingsMobileFragment : PreferenceFragmentCompat() {
         findPreference<Preference>("key_backup_import_db_mobile")?.setOnPreferenceClickListener {
             importDbBackupLauncher.launch(arrayOf("application/zip"))
             true
+        }
+    }
+
+    private fun updateCacheSizeDisplay() {
+        val cachePref = findPreference<Preference>("cache_size_display") ?: return
+        lifecycleScope.launch(Dispatchers.IO) {
+            val bytes = CacheUtils.getCacheSize(requireContext())
+            val mb = bytes / (1024.0 * 1024.0)
+            val formatted = String.format(Locale.US, "%.1f MB", mb)
+            withContext(Dispatchers.Main) {
+                cachePref.summary = formatted
+            }
         }
     }
 

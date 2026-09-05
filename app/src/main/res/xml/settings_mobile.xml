@@ -464,6 +464,19 @@
             app:iconSpaceReserved="false">
 
             <Preference
+                android:key="cache_size_display"
+                android:title="@string/settings_cache_size_title"
+                android:summary="@string/settings_cache_size_calculating"
+                android:selectable="false"
+                app:iconSpaceReserved="false" />
+
+            <Preference
+                android:key="clear_app_cache"
+                android:title="@string/settings_clear_cache_title"
+                android:summary="@string/settings_clear_cache_summary"
+                app:iconSpaceReserved="false" />
+
+            <Preference
                 android:key="key_backup_export_mobile"
                 android:title="@string/backup_export_title"
                 android:summary="@string/backup_export_summary"

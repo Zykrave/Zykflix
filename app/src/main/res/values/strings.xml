@@ -347,6 +347,11 @@
 
     <string name="backup_category_title">Backup and Restore</string>
     <string name="settings_screen_backup_summary">Export or restore favorites, history and saved app data</string>
+    <string name="settings_cache_size_title">Cache Size</string>
+    <string name="settings_cache_size_calculating">Calculating…</string>
+    <string name="settings_clear_cache_title">Clear Cache</string>
+    <string name="settings_clear_cache_summary">Frees up space by clearing images and temporary files</string>
+    <string name="settings_clear_cache_done">Cache cleared</string>
     <string name="cloud_sync_title">Account &amp; sync</string>
     <string name="cloud_sync_screen_summary">Synchronize favorites and watch history between devices</string>
     <string name="cloud_sync_account_category">Supabase account</string>
