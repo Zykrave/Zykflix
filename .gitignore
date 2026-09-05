@@ -11,3 +11,20 @@ local.properties
 *.salive
 *.log
 app/src/main/cpp/native-lib.cpp
+keys/
+*.jks
+*.keystore
+
+# Extra keystore/credential safety
+keystore.properties
+*keystore*.properties
+*.pem
+*.p12
+*.key
+secrets.properties
+google-services.json
+.env
+
+# Better build folder coverage (recursive, not just root)
+build/
+
